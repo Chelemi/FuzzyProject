@@ -1,5 +1,6 @@
 from simpful import *
-from rules import RULES
+from rules_simple import RULES
+from clothes import *
 
 
 FS = FuzzySystem()
@@ -75,10 +76,10 @@ FS.add_linguistic_variable('Hours', LV6)
 # LV6.plot()
 
 # Output variable
-O_1 = FuzzySet(function=Trapezoidal_MF(0, 0, 1, 1.5), term='dirty')
-O_2 = FuzzySet(function=Trapezoidal_MF(1, 1.5, 2, 2.5), term='somewhat dirty')
-O_3 = FuzzySet(function=Trapezoidal_MF(2, 2.5, 3, 3.5), term='somewhat clean')
-O_4 = FuzzySet(function=Trapezoidal_MF(3, 3.5, 4.5, 4.5), term='clean')
+O_1 = FuzzySet(function=Trapezoidal_MF(0, 0, 1, 1.5), term='clean')
+O_2 = FuzzySet(function=Trapezoidal_MF(1, 1.5, 2, 2.5), term='somewhat_clean')
+O_3 = FuzzySet(function=Trapezoidal_MF(2, 2.5, 3, 3.5), term='somewhat_dirty')
+O_4 = FuzzySet(function=Trapezoidal_MF(3, 3.5, 4.5, 4.5), term='dirty')
 LV7 = LinguisticVariable([O_1, O_2, O_3, O_4], concept='Cleanliness', universe_of_discourse=[0, 4.5])
 FS.add_linguistic_variable('Output', LV7)
 # O_LV = AutoTriangle(4, terms=['dirty', 'somewhat dirty', 'somewhat clean', 'clean'], universe_of_discourse=[0, 3])
@@ -87,20 +88,33 @@ FS.add_linguistic_variable('Output', LV7)
 
 
 # print(len(RULES))
-FS.add_rules(RULES)
+FS.add_rules(RULES, verbose=False)
 
 
-
+"""
 FS.set_variable(name='Days_worn', value=0)
 FS.set_variable(name='Days_left_out', value=0)
 FS.set_variable(name='Activity', value=2)
 FS.set_variable(name='Stress', value=0.0)
 FS.set_variable(name='Temperature', value=0.0)
 FS.set_variable(name='Hours', value=0.0)
+"""
+final_outputs = []
+for index, row in CLOTHES.iterrows():
+    print(f"\nCloth {index+1}:")
+    FS.set_variable(name='Days_worn', value=row['Days_worn'])
+    FS.set_variable(name='Days_left_out', value=row['Days_left_out'])
+    FS.set_variable(name='Activity', value=row['Activity'])
+    FS.set_variable(name='Stress', value=row['Stress'])
+    FS.set_variable(name='Temperature', value=row['Temperature'])
+    FS.set_variable(name='Hours', value=row['Hours'])
 
-outputs = FS.inference(verbose=False)
-for i, value in enumerate(FS.get_firing_strengths()):
-    if value:
-        print(RULES[i])
-print(outputs)
-print(LV7.get_values(outputs['Output']))
+    outputs = FS.inference(verbose=False)
+    for i, value in enumerate(FS.get_firing_strengths()):
+        if value:
+            print(f"- {RULES[i]}")
+    print(f"Output: {outputs['Output']}")
+    output_dict = LV7.get_values(outputs['Output'])
+    print(f"Final output: {dict(sorted(output_dict.items(), key=lambda item: item[1], reverse=True))}")
+    final_outputs.append(output_dict)
+    
