@@ -2,7 +2,6 @@ from simpful import *
 from rules_simple import RULES
 from clothes import *
 
-
 FS = FuzzySystem()
 
 """
@@ -99,22 +98,35 @@ FS.set_variable(name='Stress', value=0.0)
 FS.set_variable(name='Temperature', value=0.0)
 FS.set_variable(name='Hours', value=0.0)
 """
-final_outputs = []
-for index, row in CLOTHES.iterrows():
-    print(f"\nCloth {index+1}:")
-    FS.set_variable(name='Days_worn', value=row['Days_worn'])
-    FS.set_variable(name='Days_left_out', value=row['Days_left_out'])
-    FS.set_variable(name='Activity', value=row['Activity'])
-    FS.set_variable(name='Stress', value=row['Stress'])
-    FS.set_variable(name='Temperature', value=row['Temperature'])
-    FS.set_variable(name='Hours', value=row['Hours'])
 
-    outputs = FS.inference(verbose=False)
-    for i, value in enumerate(FS.get_firing_strengths()):
-        if value:
-            print(f"- {RULES[i]}")
-    print(f"Output: {outputs['Output']}")
-    output_dict = LV7.get_values(outputs['Output'])
-    print(f"Final output: {dict(sorted(output_dict.items(), key=lambda item: item[1], reverse=True))}")
-    final_outputs.append(output_dict)
-    
+def calculate_score(input):
+     FS.set_variable(name='Days_worn', value=input['Days_worn'])
+     FS.set_variable(name='Days_left_out', value=input['Days_left_out'])
+     FS.set_variable(name='Activity', value=input['Activity'])
+     FS.set_variable(name='Stress', value=input['Stress'])
+     FS.set_variable(name='Temperature', value=input['Temperature'])
+     FS.set_variable(name='Hours', value=input['Hours'])
+
+     outputs = FS.inference(verbose=False)
+     output_dict = LV7.get_values(outputs['Output'])
+     return str(output_dict)
+
+def run_tests():
+     final_outputs = []
+     for index, row in CLOTHES.iterrows():
+          print(f"\nCloth {index+1}:")
+          FS.set_variable(name='Days_worn', value=row['Days_worn'])
+          FS.set_variable(name='Days_left_out', value=row['Days_left_out'])
+          FS.set_variable(name='Activity', value=row['Activity'])
+          FS.set_variable(name='Stress', value=row['Stress'])
+          FS.set_variable(name='Temperature', value=row['Temperature'])
+          FS.set_variable(name='Hours', value=row['Hours'])
+
+          outputs = FS.inference(verbose=False)
+          for i, value in enumerate(FS.get_firing_strengths()):
+               if value:
+                    print(f"- {RULES[i]}")
+          print(f"Output: {outputs['Output']}")
+          output_dict = LV7.get_values(outputs['Output'])
+          print(f"Final output: {dict(sorted(output_dict.items(), key=lambda item: item[1], reverse=True))}")
+          final_outputs.append(output_dict)

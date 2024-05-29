@@ -1,30 +1,32 @@
-inputs = {
-    'days_worn': 2,
-    'days_left_out': 3,
-    'activity': 4,
-    'stress': 2,
-    'temperature': 3,
-    'hours': 4
-}
+from clothes import *
 
 weights = {
-    'days_worn': 1,
-    'days_left_out': 1,
-    'activity': 2,
-    'stress': 1,
-    'temperature': 1,
-    'hours': 1
+    'Days_worn': 1,
+    'Days_left_out': 1,
+    'Activity': 2,
+    'Stress': 1,
+    'Temperature': 1,
+    'Hours': 1
 }
 
-total_score = weights['days_worn'] * inputs['days_worn'] + weights['days_left_out'] * inputs['days_left_out'] + weights['activity'] * inputs['activity'] + weights['stress'] * inputs['stress'] + weights['temperature'] * inputs['temperature'] + weights['hours'] * inputs['hours']
+def calculate_score(input):
+    total_score = weights['Days_worn'] * input['Days_worn'] + weights['Days_left_out'] * input['Days_left_out'] + weights['Activity'] * input['Activity'] + weights['Stress'] * input['Stress'] + weights['Temperature'] * input['Temperature'] + weights['Hours'] * input['Hours']
 
-if total_score <= 10:
-    cleanliness = "clean"
-elif total_score <= 20:
-    cleanliness = "somewhat clean"
-elif total_score <= 30:
-    cleanliness = "somewhat dirty"
-else:
-    cleanliness = "dirty"
+    if total_score <= 10:
+        cleanliness = "clean"
+    elif total_score <= 20:
+        cleanliness = "somewhat clean"
+    elif total_score <= 30:
+        cleanliness = "somewhat dirty"
+    else:
+        cleanliness = "dirty"
 
-print("Cleanliness classification:", cleanliness)
+    return total_score, cleanliness
+
+def run_test():
+    for index, row in CLOTHES.iterrows():
+        print(f"\nCloth {index+1}:")
+
+        score, cleanliness = calculate_score(row)
+        print(f"Output: {score}")
+        print(f"Final output: {cleanliness}")
