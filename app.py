@@ -37,11 +37,13 @@ def run_tests():
         'Classifier': request.form['Classifier']
     }
     
-    answers = None
+    answers = []
     if data['Classifier'] == 'naive':
-        Classifier.run_test()
+        correct, total = Classifier.run_test()
+        answers.append(str(correct) + ' / ' + str(total) + ' correct')
     else:
-        Fuzzy_simpful.run_tests()
+        correct, total = Fuzzy_simpful.run_tests()
+        answers.append(str(correct) + ' / ' + str(total) + ' correct')
     
     return render_template('form.html', answers=answers)
 

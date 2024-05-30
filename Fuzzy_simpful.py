@@ -112,6 +112,7 @@ def calculate_score(input):
      return str(output_dict)
 
 def run_tests():
+     correct_counter = 0
      final_outputs = []
      for index, row in CLOTHES.iterrows():
           print(f"\nCloth {index+1}:")
@@ -130,3 +131,10 @@ def run_tests():
           output_dict = LV7.get_values(outputs['Output'])
           print(f"Final output: {dict(sorted(output_dict.items(), key=lambda item: item[1], reverse=True))}")
           final_outputs.append(output_dict)
+
+          cleanliness = max(output_dict, key=output_dict.get)
+          cleanliness = cleanliness.replace("_", " ")
+          if cleanliness == row['Output']:
+               correct_counter += 1
+
+     return correct_counter, CLOTHES.shape[0]

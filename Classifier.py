@@ -24,9 +24,15 @@ def calculate_score(input):
     return total_score, cleanliness
 
 def run_test():
+    correct_counter = 0
     for index, row in CLOTHES.iterrows():
         print(f"\nCloth {index+1}:")
 
         score, cleanliness = calculate_score(row)
         print(f"Output: {score}")
         print(f"Final output: {cleanliness}")
+
+        if cleanliness == row['Output']:
+            correct_counter += 1
+
+    return correct_counter, CLOTHES.shape[0]
