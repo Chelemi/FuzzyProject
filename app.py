@@ -25,7 +25,7 @@ def submit():
     
     answers = []
     if data['Classifier'] == 'naive':
-        answers.append(Classifier.calculate_score(data))
+        answers.append(Classifier.calculate_score(data)[1])
     else:
         answers.append(Fuzzy_simpful.calculate_score(data))
     
