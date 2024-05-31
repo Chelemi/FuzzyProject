@@ -15,12 +15,12 @@ def form():
 def submit():
     data = {
         'Classifier': request.form['Classifier'],
-        'Days_worn': int(request.form['Days_worn']),
-        'Days_left_out': int(request.form['Days_left_out']),
-        'Activity': int(request.form['Activity']),
-        'Stress': int(request.form['Stress']),
-        'Temperature': int(request.form['Temperature']),
-        'Hours': int(request.form['Hours'])
+        'Days_worn': float(request.form['Days_worn']),
+        'Days_left_out': float(request.form['Days_left_out']),
+        'Activity': float(request.form['Activity']),
+        'Stress': float(request.form['Stress']),
+        'Temperature': float(request.form['Temperature']),
+        'Hours': float(request.form['Hours'])
     }
     
     answers = []
